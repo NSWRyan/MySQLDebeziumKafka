@@ -1,0 +1,16 @@
+version: "3"
+services:
+  kafka.kafdrop:
+    image: obsidiandynamics/kafdrop
+    restart: "no"
+    container_name: kafka.kafdrop
+    ports:
+      - "9000:9000"
+    environment:
+      KAFKA_BROKERCONNECT: "testrun.kafka:9092"
+      JVM_OPTS: "-Xms16M -Xmx48M -Xss180K -XX:-TieredCompilation -XX:+UseStringDeduplication -noverify"
+
+networks:
+  default:
+    external: true
+    name: kafka_test_net

@@ -1,0 +1,52 @@
+version: "3"
+services:
+  testrun.kafka:
+    platform: linux/x86_64 # this line is needed for Apple silicon
+    image: kafka_test_image:1.0
+    build:
+      context: ./Kafka
+    container_name: testrun.kafka
+    hostname: testrun.kafka
+    ports:
+      - "9092:9092"
+  testrun.kafdrop:
+    image: obsidiandynamics/kafdrop
+    restart: "no"
+    container_name: testrun.kafdrop
+    ports:
+      - "9000:9000"
+    environment:
+      KAFKA_BROKERCONNECT: "testrun.kafka:9092"
+      JVM_OPTS: "-Xms16M -Xmx48M -Xss180K -XX:-TieredCompilation -XX:+UseStringDeduplication -noverify"
+    depends_on: 
+      - "testrun.kafka"
+  testrun.mysql:
+    container_name: testrun.mysql
+    image: mysql:8.0.30
+    platform: linux/x86_64 # this line is needed for Apple silicon
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      TZ: "Asia/Tokyo"
+    volumes:
+      - ./MySQL/my.cnf:/etc/mysql/conf.d/my.cnf
+      - ./MySQL/setup.sql:/docker-entrypoint-initdb.d/setup.sql
+  testrun.connect:
+    container_name: testrun.connect
+    image: debezium_test_image:1.0
+    build:
+      context: ./ConnectDebezium
+    volumes:
+      - /sys/fs/cgroup:/sys/fs/cgroup:ro
+    ports:
+      - "8083:8083"
+    depends_on: 
+      - "testrun.kafka"
+      - "testrun.mysql"
+    tty: true
+
+
+networks:
+  default:
+    name: testnet

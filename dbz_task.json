@@ -1,0 +1,17 @@
+{
+    "name": "test_table-connector",  
+    "config": {  
+        "connector.class": "io.debezium.connector.mysql.MySqlConnector",
+        "database.hostname": "testrun.mysql",  
+        "database.port": "3306",
+        "database.user": "debezium",
+        "database.password": "dbz",
+        "database.server.id": "1",
+        "topic.prefix": "test_mysql_db",      
+        "database.include.list": "test_db",  
+        "table.include.list": "test_db.test_table",
+        "schema.history.internal.kafka.bootstrap.servers": "testrun.kafka:9092",  
+        "schema.history.internal.kafka.topic": "schema-changes.test_table",  
+        "driver.preserveInstants": "true"
+    }
+}
