@@ -127,9 +127,9 @@ So here we go, lets learn how it works by doing the setup from scratch.
     * Only track tables in this list.
 
 # Setup/configuration notes
-* listeners in server.properties cannot be localhost/127.0.0.1.
+* Listeners in server.properties cannot be localhost/127.0.0.1.
     * For some reason, if it is localhost, then Kafka can only be accessed from localhost.
-* some systemd services exist but are not used.
+* Some systemd services exist but are not used.
     * systemd requires priviledged options in the docker-compose.yml.
 
 # References
